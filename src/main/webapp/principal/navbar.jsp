@@ -2,7 +2,15 @@
 	pageEncoding="ISO-8859-1"%>
 
 
-
+<style>
+	.logo-title{
+		margin: 0 0 0 20px !important;
+	}
+	
+	.nome-user-logado{
+		text-transform: capitalize;
+	}
+</style>
 
 <nav class="navbar header-navbar pcoded-header">
 	<div class="navbar-wrapper">
@@ -22,10 +30,12 @@
 					</div>
 				</div>
 			</div>
-			<a href="index.html"> <img class="img-fluid"
-				src="<%= request.getContextPath() %>/assets/images/logo.png" alt="Theme-Logo" />
-			</a> <a class="mobile-options waves-effect waves-light"> <i
-				class="ti-more"></i>
+			<a href="<%= request.getContextPath() %>/principal/principal.jsp">
+				<h4 class="logo-title">LOGO</h4>
+			</a>
+			
+			<a class="mobile-options waves-effect waves-light">
+				<i class="ti-more"></i>
 			</a>
 		</div>
 
@@ -57,7 +67,7 @@
 				</a>
 					<ul class="show-notification">
 						<li>
-							<h6>Notifications</h6> <label class="label label-danger">New</label>
+							<h6>Novidades</h6> <label class="label label-danger">Novo</label>
 						</li>
 						<li class="waves-effect waves-light">
 							<div class="media">
@@ -100,25 +110,28 @@
 						</li>
 					</ul></li>
 				<li class="user-profile header-notification"><a href="#!"
-					class="waves-effect waves-light"> <img
-						src="<%= request.getContextPath() %>/assets/images/avatar-4.jpg" class="img-radius"
-						alt="User-Profile-Image"> <span><%= request.getSession().getAttribute("usuario") %></span> <i
+					class="waves-effect waves-light"><span class="nome-user-logado"><%= request.getSession().getAttribute("usuario") %></span> <i
 						class="ti-angle-down"></i>
 				</a>
 					<ul class="show-notification profile-notification">
+					<!--  
 						<li class="waves-effect waves-light"><a href="#!"> <i
 								class="ti-settings"></i> Settings
 						</a></li>
+						
 						<li class="waves-effect waves-light"><a
 							href="user-profile.html"> <i class="ti-user"></i> Profile
 						</a></li>
+						
 						<li class="waves-effect waves-light"><a
 							href="email-inbox.html"> <i class="ti-email"></i> My Messages
 						</a></li>
+						
 						<li class="waves-effect waves-light"><a
 							href="auth-lock-screen.html"> <i class="ti-lock"></i> Lock
 								Screen
 						</a></li>
+						-->
 						<li class="waves-effect waves-light"><a
 							href="<%= request.getContextPath() %>/LoginServlet?acao=logout"> <i
 								class="ti-layout-sidebar-left"></i> Logout

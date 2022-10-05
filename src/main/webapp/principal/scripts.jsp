@@ -38,3 +38,7 @@
 <script type="text/javascript"
 	src="<%= request.getContextPath() %>/assets/pages/dashboard/custom-dashboard.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/assets/js/script.js "></script>
+<!-- Mask jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+<!-- Mask Money -->
+<script type="text/javascript" src="<%= request.getContextPath() %>/assets/js/jquery.maskMoney.js"></script>

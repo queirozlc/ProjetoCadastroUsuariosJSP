@@ -24,7 +24,7 @@ public class UsuarioDAORepository {
 		// Verifica se o id do usuario nao existe e grava um novo
 		if (model.verificaId()) {
 
-			String sql = "INSERT INTO model_login (login, senha, nome, email, usuario_id, perfil, sexo, cep, logradouro, localidade, uf, numero, bairro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+			String sql = "INSERT INTO model_login (login, senha, nome, email, usuario_id, perfil, sexo, cep, logradouro, localidade, uf, numero, bairro, datanascimento, salario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, model.getLogin());
 			statement.setString(2, model.getSenha());
@@ -39,6 +39,8 @@ public class UsuarioDAORepository {
 			statement.setString(11, model.getUf());
 			statement.setString(12, model.getNumero());
 			statement.setString(13, model.getBairro());
+			statement.setDate(14, model.getDataNascimento());
+			statement.setDouble(15, model.getSalario());
 
 			statement.execute();
 			connection.commit();
@@ -55,7 +57,7 @@ public class UsuarioDAORepository {
 			}
 
 		} else {
-			String sql = "UPDATE model_login SET login = ?, senha = ?, nome = ?, email = ?, perfil = ?, sexo = ?, cep = ?, logradouro = ?, localidade = ?, uf = ?, numero = ?, bairro = ? WHERE id = " + model.getId() + ";";
+			String sql = "UPDATE model_login SET login = ?, senha = ?, nome = ?, email = ?, perfil = ?, sexo = ?, cep = ?, logradouro = ?, localidade = ?, uf = ?, numero = ?, bairro = ?, datanascimento = ?, salario = ? WHERE id = " + model.getId() + ";";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, model.getLogin());
 			statement.setString(2, model.getSenha());
@@ -69,6 +71,8 @@ public class UsuarioDAORepository {
 			statement.setString(10, model.getUf());
 			statement.setString(11, model.getNumero());
 			statement.setString(12, model.getBairro());
+			statement.setDate(13, model.getDataNascimento());
+			statement.setDouble(14, model.getSalario());
 
 			statement.executeUpdate();
 			connection.commit();
@@ -86,6 +90,25 @@ public class UsuarioDAORepository {
 
 		}
 		return this.consultarUsuarioLogin(model.getLogin(), idUsuarioLogado);
+	}
+	
+	public int buscarUsuarioNomeEPaginacao(String nome, Long userLogado) throws SQLException {
+
+		String sql = "SELECT COUNT(1) AS total FROM model_login WHERE upper(nome) LIKE upper(?) AND useradmin is false AND usuario_id = ?";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setString(1, "%" + nome + "%");
+		preparedStatement.setLong(2, userLogado);
+		ResultSet resultado = preparedStatement.executeQuery();
+		resultado.next();
+		Double cadastros = resultado.getDouble("total");
+		Double numeroPaginas = 5.0;
+		Double pagina = cadastros / numeroPaginas;
+		Double resto = pagina % 2;
+		
+		if (resto > 0 ) {
+			pagina++;
+		}
+		return pagina.intValue();
 	}
 
 	public List<ModelLogin> buscarUsuarioNome(String nome, Long userLogado) throws SQLException {
@@ -106,6 +129,7 @@ public class UsuarioDAORepository {
 			model.setUserAdmin(result.getBoolean("useradmin"));
 			model.setPerfil(result.getString("perfil"));
 			model.setSexo(result.getString("sexo"));
+			
 
 			listaUsuarios.add(model);
 		}
@@ -138,6 +162,8 @@ public class UsuarioDAORepository {
 			model.setUf(result.getString("uf"));
 			model.setNumero(result.getString("numero"));
 			model.setBairro(result.getString("bairro"));
+			model.setDataNascimento(result.getDate("datanascimento"));
+			model.setSalario(result.getDouble("salario"));
 		}
 
 		return model;
@@ -167,6 +193,8 @@ public class UsuarioDAORepository {
 			model.setUf(result.getString("uf"));
 			model.setNumero(result.getString("numero"));
 			model.setBairro(result.getString("bairro"));
+			model.setDataNascimento(result.getDate("datanascimento"));
+			model.setSalario(result.getDouble("salario"));
 			
 		}
 
@@ -197,6 +225,8 @@ public class UsuarioDAORepository {
 			model.setUf(result.getString("uf"));
 			model.setNumero(result.getString("numero"));
 			model.setBairro(result.getString("bairro"));
+			model.setDataNascimento(result.getDate("datanascimento"));
+			model.setSalario(result.getDouble("salario"));
 		}
 
 		return model;
@@ -228,6 +258,8 @@ public class UsuarioDAORepository {
 			model.setUf(result.getString("uf"));
 			model.setNumero(result.getString("numero"));
 			model.setBairro(result.getString("bairro"));
+			model.setDataNascimento(result.getDate("datanascimento"));
+			model.setSalario(result.getDouble("salario"));
 		}
 
 		return model;
@@ -310,6 +342,63 @@ public class UsuarioDAORepository {
 		}
 
 		return listaUsuarios;
+	}
+	
+	public List<ModelLogin> buscaUsuariosPorNomeOffset(String nome, Long idUsuarioLogado, Integer offset) throws SQLException {
+		List<ModelLogin> listaUsuarios = new ArrayList<ModelLogin>();
+
+		String sql = "SELECT * FROM model_login WHERE upper(nome) LIKE upper(?) AND useradmin is false AND usuario_id = ? OFFSET "+offset+" LIMIT 5;";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setString(1, "%" + nome + "%");
+		preparedStatement.setLong(2, idUsuarioLogado);
+		
+		ResultSet resultado = preparedStatement.executeQuery();
+
+		while (resultado.next()) {
+			ModelLogin model = new ModelLogin();
+			model.setEmail(resultado.getString("email"));
+			model.setId(resultado.getLong("id"));
+			model.setLogin(resultado.getString("login"));
+			model.setNome(resultado.getString("nome"));
+			model.setPerfil(resultado.getString("perfil"));
+			model.setSexo(resultado.getString("sexo"));
+
+			listaUsuarios.add(model);
+		}
+
+		return listaUsuarios;
+	}
+	
+	public ModelLogin consultaPorIdSemUsuarioLogado(Long id) throws SQLException {
+		ModelLogin model = new ModelLogin();
+
+		String sql = "SELECT * FROM model_login WHERE id = ? AND useradmin is false;";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setLong(1, id);
+		ResultSet result = preparedStatement.executeQuery();
+
+		while (result.next()) {
+			model.setId(result.getLong("id"));
+			model.setEmail(result.getString("email"));
+			model.setLogin(result.getString("login"));
+			model.setNome(result.getString("nome"));
+			model.setSenha(result.getString("senha"));
+			model.setUserAdmin(result.getBoolean("useradmin"));
+			model.setPerfil(result.getString("perfil"));
+			model.setSexo(result.getString("sexo"));
+			model.setFotoUser(result.getString("fotouser"));
+			model.setExtensaoFotoUser(result.getString("extensaofotouser"));
+			model.setCep(result.getString("cep"));
+			model.setLogradouro(result.getString("logradouro"));
+			model.setLocalidade(result.getString("localidade"));
+			model.setUf(result.getString("uf"));
+			model.setNumero(result.getString("numero"));
+			model.setBairro(result.getString("bairro"));
+			model.setDataNascimento(result.getDate("datanascimento"));
+			model.setSalario(result.getDouble("salario"));
+		}
+
+		return model;
 	}
 
 }

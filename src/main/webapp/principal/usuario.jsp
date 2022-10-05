@@ -1,6 +1,5 @@
 <%@page import="model.ModelLogin"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -20,12 +19,7 @@
 	overflow: scroll;
 }
 
-#fotoembase64 {
-	width: 100px;
-	border-radius: 50px;
-	background-position: center;
-	background-size: cover;
-}
+
 
 .uploader-container {
 	display: flex;
@@ -71,11 +65,11 @@
 												<!-- Basic Form Inputs card start -->
 												<div class="card">
 													<div class="card-header">
-														<h5>Cadastro de Usu·rios</h5>
+														<h5>Cadastro de Usu√°rios</h5>
 													</div>
 													<div class="card-block">
 														<h4 class="sub-title">Cadastro e Consulta de
-															Usu·rios.</h4>
+															Usu√°rios.</h4>
 														<form class="form-material" method="post"
 															enctype="multipart/form-data"
 															action="<%=request.getContextPath()%>/ServletCadastrarUsuario"
@@ -87,10 +81,8 @@
 																<input type="text" name="id" id="id"
 																	class="form-control" required readonly="readonly"
 																	value="${modelLogin.id}"> <span
-																	class="form-bar"></span> <label class="float-label">ID</label>
+																	class="form-bar"></span> <label class="float-label">ID:</label>
 															</div>
-
-
 
 															<div class="form-group form-default">
 																<input type="text" name="nome" id="nome"
@@ -98,23 +90,38 @@
 																	value="${modelLogin.nome}"> <span
 																	class="form-bar"></span> <label class="float-label">Nome:</label>
 															</div>
+															
 															<div class="form-group form-default">
 																<input type="text" name="login" id="login"
 																	class="form-control" required
 																	value="${modelLogin.login}"> <span
 																	class="form-bar"></span> <label class="float-label">Login:</label>
 															</div>
+															
 															<div class="form-group form-default">
 																<input type="email" name="email" id="email"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.email}"> <span
 																	class="form-bar"></span> <label class="float-label">E-mail:</label>
 															</div>
+															
+															<div class="form-group form-default">
+																<input type="text" name="dataNascimento" id="dataNascimento"
+																	class="form-control" required onkeypress="$(this).mask('00/00/0000')"
+																	value="${modelLogin.dataNascimento}"> <span
+																	class="form-bar"></span> <label class="float-label">Data de Nascimento:</label>
+															</div>
+															
+															<div class="form-group form-default">
+																<input type="text" name="salario" id="salario"
+																	value="${modelLogin.salario }" class="form-control" required> <span
+																	class="form-bar"></span> <label class="float-label">Sal√°rio:</label>
+															</div>
 
 															<div class="form-group form-default">
 																<input type="text" name="cep" id="cep"
 																	class="form-control" required autocomplete="off"
-																	value="${modelLogin.cep}" onblur="pesquisaCep();">
+																	value="${modelLogin.cep}" onblur="pesquisaCep();" >
 																<span class="form-bar"></span> <label
 																	class="float-label">Cep:</label>
 															</div>
@@ -130,7 +137,7 @@
 																<input type="text" name="numero" id="numero"
 																	class="form-control" required autocomplete="off"
 																	value="${modelLogin.numero}"> <span
-																	class="form-bar"></span> <label class="float-label">N˙mero:</label>
+																	class="form-bar"></span> <label class="float-label">N√∫mero:</label>
 															</div>
 
 															<div class="form-group form-default">
@@ -160,7 +167,7 @@
 																<select class="form-control"
 																	aria-label="Default select example" name="perfil">
 																	<option disabled="disabled" selected="selected">SELECIONE
-																		UMA OP«√O</option>
+																		UMA OP√á√ÉO</option>
 																	<option value="ADMINISTRADOR"
 																		<%ModelLogin model = (ModelLogin) request.getAttribute("modelLogin");
 
@@ -177,7 +184,7 @@ if (model != null && model.getPerfil().equals("FUNCIONARIO")) {
 	out.println(" ");
 	out.print("selected=\"selected\"");
 	out.println(" ");
-}%>>Funcion·rio</option>
+}%>>Funcion√°rio</option>
 																	<option value="DIRETOR"
 																		<%model = (ModelLogin) request.getAttribute("modelLogin");
 
@@ -237,7 +244,7 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 																		test="${modelLogin.fotoUser != '' && modelLogin.fotoUser != null}">
 																		<a
 																			href="<%= request.getContextPath() %>/ServletCadastrarUsuario?acao=downloadFoto&id=${modelLogin.id}">
-																			<img alt="Upload Foto perfil"
+																			<img class="img-80 img-radius" alt="Upload Foto perfil"
 																			src="${modelLogin.fotoUser }" id="fotoembase64">
 																		</a>
 																	</c:if>
@@ -245,7 +252,7 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 																	<c:if
 																		test="${modelLogin.fotoUser == '' || modelLogin.fotoUser == null}">
 
-																		<img alt="Upload Foto perfil"
+																		<img class="img-80 img-radius" alt="Upload Foto perfil"
 																			src="<%=request.getContextPath()%>/assets/images/avatar-4.jpg"
 																			id="fotoembase64">
 																	</c:if>
@@ -264,17 +271,23 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 
 															<!-- Cadastrar -->
 															<button class="btn btn-success waves-effect waves-light">Salvar
-																Usu·rio</button>
+																Usu√°rio</button>
 
 															<!-- Excluir -->
 															<button type="button"
 																class="btn btn-info waves-effect waves-light"
-																onclick="criarDeleteAjax();">Excluir Usu·rio</button>
+																onclick="criarDeleteAjax();">Excluir Usu√°rio</button>
 
-															<!-- Constulta -->
+															<!-- Consulta -->
 															<button type="button" class="btn btn-primary"
 																data-toggle="modal" data-target="#exampleModal">
 																Consultar Cadastros</button>
+																
+															<!-- Consultar Telefone -->
+															<c:if test="${modelLogin.id > 0}">
+																<a href="<%= request.getContextPath() %>/ServletTelefone?idUser=${modelLogin.id}" 
+																class="btn btn-success waves-effect waves-light">Consultar Telefone</a>
+															</c:if>
 														</form>
 
 														<h5 class="sucess-msg" id="msg">${msg}</h5>
@@ -347,7 +360,7 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Pesquisar
-						Usu·rio</h5>
+						Usu√°rio</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -384,6 +397,11 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 					<span id="totalResultados"></span>
 				</div>
 				<div class="modal-footer">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination" id="ulPaginacaoUser">
+						</ul>
+					</nav>
+
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Fechar</button>
 				</div>
@@ -392,6 +410,48 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 	</div>
 
 	<script type="text/javascript">
+	
+		$("#salario").maskMoney({showSymbol:true, symbol:"R$ ", decimal:",", thousands:"."});
+		
+		const formatter = Intl.NumberFormat('pt-BR', {
+			
+			currency: 'BRL',
+			minimumFractionDigits: 2
+		});
+		
+		$("#salario").val(formatter.format($("#salario").val()));
+		$("#salario").focus();
+		
+		var dataNascimento = $("#dataNascimento").val();
+		
+		var dateFormat = new Date(dataNascimento);
+		
+		$("#dataNascimento").val(dateFormat.toLocaleDateString('pt-BR', {timeZone: 'UTC'}));
+		
+		$("#nome").focus();
+	
+		$( function() {
+			  
+			  $("#dataNascimento").datepicker({
+				    dateFormat: 'dd/mm/yy',
+				    dayNames: ['Domingo','Segunda','Ter√ßa','Quarta','Quinta','Sexta','S√°bado'],
+				    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+				    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','S√°b','Dom'],
+				    monthNames: ['Janeiro','Fevereiro','Mar√ßo','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+				    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+				    nextText: 'Pr√≥ximo',
+				    prevText: 'Anterior'
+				});
+		} );
+	
+		$("#numero").keypress(function () {
+			return /\d/.test(String.fromCharCode(event.keyCode));
+		});
+		
+		$("#cep").keypress(function () {
+			return /\d/.test(String.fromCharCode(event.keyCode));
+		});
+	
 		function pesquisaCep() {
 
 			let cep = $("#cep").val();
@@ -435,6 +495,52 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 			window.location.href = urlAction + '?acao=buscarEditar&id=' + id;
 
 		}
+		
+		function buscaUserPagAjax(url){
+			
+			var urlAction = document.getElementById('formUser').action;
+		    var nomeBusca = document.getElementById('nomeBusca').value;
+		    
+			$.ajax({
+
+				method: "get",
+			    url : urlAction,
+			    data : url,
+				success : function(response, textStatus, xhr) {
+
+					var json = JSON.parse(response);
+
+					$('#tabelaresultados > tbody > tr').remove();
+					$("#ulPaginacaoUser > li").remove();
+
+					for (p = 0; p < json.length; p++) {
+						$('#tabelaresultados > tbody')
+								.append(
+										'<tr> <td>'
+												+ json[p].id
+												+ '</td> <td> '
+												+ json[p].nome
+												+ '</td> <td><button onclick="verEditar('
+												+ json[p].id
+												+ ');" type="button" class="btn btn-info">Ver</button></td></tr>');
+					}
+					
+					document.getElementById('totalResultados').textContent = "Resultados: " + json.length;
+					
+					var totalPagina = xhr.getResponseHeader("totalPagina");
+					
+					for (var p = 0; p < totalPagina; p++) {
+						var url = 'nomeBusca=' + nomeBusca + '&acao=buscarUserAjaxPage&pagina='+ p * 5;
+						$("#ulPaginacaoUser").append('<li class="page-item"><a class="page-link" href="#" onclick="buscaUserPagAjax(\''+url+'\')">'+ (p + 1) +'</a></li>');
+					}
+				}	
+
+			}).fail(
+			function(xhr, status, errorThrown) {
+				alert('Erro ao buscar usu√°rio por nome: ' + xhr.responseText);
+			});
+			
+		}
 
 		function buscarUsuario() {
 
@@ -444,20 +550,18 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 
 				let urlAction = document.getElementById('formUser').action;
 
-				$
-						.ajax(
-								{
+				$.ajax({
 
 									method : "get",
 									url : urlAction,
 									data : "nomeBusca=" + nomeBusca
 											+ '&acao=buscarUser',
-									success : function(response) {
+									success : function(response, textStatus, xhr) {
 
 										var json = JSON.parse(response);
 
-										$('#tabelaresultados > tbody > tr')
-												.remove();
+										$('#tabelaresultados > tbody > tr').remove();
+										$("#ulPaginacaoUser > li").remove();
 
 										for (p = 0; p < json.length; p++) {
 											$('#tabelaresultados > tbody')
@@ -470,20 +574,25 @@ if (model != null && model.getSexo().equals("FEMININO")) {
 																	+ json[p].id
 																	+ ');" type="button" class="btn btn-info">Ver</button></td></tr>');
 										}
-										document
-												.getElementById('totalResultados').textContent = "Resultados: "
-												+ json.length;
-									}
+										
+										document.getElementById('totalResultados').textContent = "Resultados: " + json.length;
+										
+										var totalPagina = xhr.getResponseHeader("totalPagina");
+										
+										for (p = 0; p < totalPagina; p++) {
+											var url = 'nomeBusca=' + nomeBusca + '&acao=buscarUserAjaxPage&pagina='+ (p * 5);
+											$("#ulPaginacaoUser").append('<li class="page-item"><a class="page-link" href="#" onclick="buscaUserPagAjax(\''+url+'\')">'+ (p + 1) +'</a></li>');
+										}
+									}	
 
 								}).fail(
 								function(xhr, status, errorThrown) {
-									alert('Erro ao buscar usu·rio por nome: '
-											+ xhr.responseText);
+									alert('Erro ao buscar usu√°rio por nome: ' + xhr.responseText);
 								});
-
 			}
 
 		}
+		
 
 		function criarDeleteAjax() {
 			if (confirm('Deseja realmente deletar esse usuario?')) {

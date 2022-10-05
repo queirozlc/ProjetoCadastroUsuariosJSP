@@ -26,12 +26,14 @@ File: style.css
 /**  =====================
       Custom css start
 ==========================  **/
+
+
 body {
   background-color: #f3f3f3;
   font-size: 0.875em;
   overflow-x: hidden;
   color: #455a64;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   background-attachment: fixed;
   background-image: linear-gradient(rgba(255, 255, 255, 0.2) 177px, rgba(255, 255, 255, 0.9) 18.6%); }
 
@@ -15181,7 +15183,6 @@ pre.line-numbers > code {
     margin-top: 0; }
 
   h4 {
-    font-size: 1rem;
     font-weight: 600; }
 
   .recent-candidate-card .recent-contain {
@@ -15195,8 +15196,8 @@ pre.line-numbers > code {
   .card h5 {
     font-size: 16px; }
 
-  .header-navbar .navbar-wrapper .navbar-logo {
-    display: inherit; }
+  /*.header-navbar .navbar-wrapper .navbar-logo {
+    display: inherit; }*/
     .header-navbar .navbar-wrapper .navbar-logo a {
       display: inline-block; }
 
@@ -16456,5 +16457,6 @@ body.dark {
 }
 .fixed-button.active {
   bottom: 50px;
-  opacity: 1;
+  opacity: 0;
+  display: none !important;
 }

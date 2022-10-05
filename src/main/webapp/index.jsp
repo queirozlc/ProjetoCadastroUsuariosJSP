@@ -8,6 +8,9 @@
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Google font-->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <title>Curso JSP</title>
 
 <style type="text/css">
@@ -18,6 +21,7 @@
 		justify-content: center;
 		align-items: center;
 		row-gap: 1.5rem;
+		font-family: 'Poppins', sans-serif !important;
 	}
 	
 	.title {

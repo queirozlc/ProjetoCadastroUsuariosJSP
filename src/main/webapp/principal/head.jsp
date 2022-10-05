@@ -24,8 +24,7 @@
 <!-- Favicon icon -->
 <link rel="icon" href="<%= request.getContextPath() %>/assets/images/favicon.ico" type="image/x-icon">
 <!-- Google font-->
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,500"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- waves.css -->
 <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/pages/waves/css/waves.min.css"
 	type="text/css" media="all">
@@ -50,4 +49,7 @@
 	type="text/css" media="all" />
 <!-- Style.css -->
 <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/assets/css/style.css">
+
+<!-- Jquery Calendar -->
+<link href="https://code.jquery.com/ui/1.9.1/themes/smoothness/jquery-ui.css" rel="stylesheet">
 </head>
