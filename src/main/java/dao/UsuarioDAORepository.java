@@ -1,14 +1,18 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import connection.SingleConnection;
 import model.ModelLogin;
+import model.ModelTelefone;
 
 public class UsuarioDAORepository {
 
@@ -401,4 +405,85 @@ public class UsuarioDAORepository {
 		return model;
 	}
 
+	public List<ModelLogin> consultarTodosUsuariosSemLimitar(Long userLogado) throws SQLException {
+		List<ModelLogin> retorno = new ArrayList<ModelLogin>();
+
+		String sql = "select * from model_login where useradmin is false and usuario_id = " + userLogado;
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) { /* percorrer as linhas de resultado do SQL */
+
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			modelLogin.setPerfil(resultado.getString("perfil"));
+			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
+			modelLogin.setListaTelefones(this.listarTelefone(modelLogin.getId()));
+
+			retorno.add(modelLogin);
+		}
+
+		return retorno;
+	}
+
+	
+public List<ModelTelefone> listarTelefone(Long idUserPai) throws SQLException {
+		
+		List<ModelTelefone> listaTelefones = new ArrayList<ModelTelefone>();
+		
+		String sql = "SELECT * FROM TELEFONE WHERE usuario_id = ?;";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setLong(1, idUserPai);
+		ResultSet resultado = preparedStatement.executeQuery();
+		
+		while(resultado.next()) {
+			ModelTelefone model = new ModelTelefone();
+			
+			model.setId(resultado.getLong("id"));
+			model.setNumero(resultado.getString("numero"));
+			model.setIdUsuarioPaiCadastro(this.consultaPorIdSemUsuarioLogado(resultado.getLong("usuario_id")));
+			model.setIdUsuarioQueCadastrou(this.consultaPorIdSemUsuarioLogado(resultado.getLong("usuario_cad_id")));
+			
+			listaTelefones.add(model);
+			
+		}
+		
+		return listaTelefones;
+	}
+
+	public List<ModelLogin> consultarTodosUsuariosRelatorio(Long userLogado, String dataInicial, String dataFinal) throws SQLException, ParseException {
+List<ModelLogin> retorno = new ArrayList<ModelLogin>();
+		
+		String sql = "select * from model_login where useradmin is false and usuario_id = " + userLogado + " and datanascimento >= ? and datanascimento <= ?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setDate(1, Date.valueOf(new SimpleDateFormat("yyyy-mm-dd").format(new SimpleDateFormat("dd/mm/yyyy").parse(dataInicial))));
+		statement.setDate(2, Date.valueOf(new SimpleDateFormat("yyyy-mm-dd").format(new SimpleDateFormat("dd/mm/yyyy").parse(dataFinal))));
+		
+		ResultSet resultado = statement.executeQuery();
+		
+		while (resultado.next()) { /*percorrer as linhas de resultado do SQL*/
+			
+			ModelLogin modelLogin = new ModelLogin();
+
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			// modelLogin.setSenha(resultado.getString("senha"));
+			modelLogin.setPerfil(resultado.getString("perfil"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
+			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setListaTelefones(this.listarTelefone(modelLogin.getId()));
+
+			retorno.add(modelLogin);
+		}
+
+		return retorno;
+	}
 }
