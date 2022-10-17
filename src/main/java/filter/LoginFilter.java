@@ -54,6 +54,8 @@ public class LoginFilter extends HttpFilter implements Filter {
 				chain.doFilter(request, response);
 			}
 			
+			
+			
 			connection.commit();
 			
 		} catch (Exception e) {

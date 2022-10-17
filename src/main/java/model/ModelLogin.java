@@ -191,5 +191,5 @@ public class ModelLogin implements Serializable {
 	public void setListaTelefones(List<ModelTelefone> listaTelefones) {
 		this.listaTelefones = listaTelefones;
 	}
-	
+
 }

@@ -40,6 +40,7 @@ public class LoginServlet extends HttpServlet {
 		String login = request.getParameter("login");
 		String senha = request.getParameter("senha");
 		String url = request.getParameter("url");
+		
 
 		try {
 			if (login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
@@ -58,7 +59,7 @@ public class LoginServlet extends HttpServlet {
 					if (url == null || url.equals("null")) {
 						url = "principal/principal.jsp";
 					}
-
+					
 					RequestDispatcher dispatcher = request.getRequestDispatcher(url);
 					dispatcher.forward(request, response);
 

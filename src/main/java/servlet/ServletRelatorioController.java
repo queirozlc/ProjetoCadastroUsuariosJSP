@@ -3,7 +3,10 @@ package servlet;
 import java.io.IOException;
 import java.util.List;
 
-import dao.TelefoneDAORepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import bean.BeanGraficoSalarioUsuario;
+import dao.RelatorioDAORepository;
 import dao.UsuarioDAORepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -18,7 +21,7 @@ public class ServletRelatorioController extends ServletGenericUtil {
 	private static final long serialVersionUID = 1L;
 	
 	private UsuarioDAORepository usuarioRepository = new UsuarioDAORepository();
-	private TelefoneDAORepository telefoneRepository = new TelefoneDAORepository();
+	private RelatorioDAORepository relatorioRepository = new RelatorioDAORepository();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -62,6 +65,28 @@ public class ServletRelatorioController extends ServletGenericUtil {
 				
 				response.setHeader("Content-disposition", "attachment;filename=arquivo.pdf");
 				response.getOutputStream().write(relatorio);
+			
+			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("graficoSalario")) {
+				
+				String dataInicial = request.getParameter("dataInicial");
+				String dataFinal = request.getParameter("dataFinal");
+				
+				if (dataInicial == null || dataInicial.isEmpty() && dataFinal == null || dataFinal.isEmpty()) {
+					
+					BeanGraficoSalarioUsuario beanGraficoSalario = relatorioRepository.montarGraficoMediaSalario(super.getUserLogado(request));
+					ObjectMapper mapper = new ObjectMapper();
+					String json = mapper.writeValueAsString(beanGraficoSalario);
+					response.getWriter().write(json);
+				
+				} else {
+					
+					BeanGraficoSalarioUsuario beanGraficoSalario = relatorioRepository.
+							montarGraficoMediaSalarioPorData(super.getUserLogado(request), dataInicial, dataFinal);
+					ObjectMapper mapper = new ObjectMapper();
+					String json = mapper.writeValueAsString(beanGraficoSalario);
+					response.getWriter().write(json);
+				}
+				
 			}
 			
 		} catch (Exception e) {
