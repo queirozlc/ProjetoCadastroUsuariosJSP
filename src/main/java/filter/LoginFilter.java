@@ -12,11 +12,15 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import connection.SingleConnection;
+import dao.VersionadorDAORepository;
 
 @WebFilter(urlPatterns = { "/principal/*" })
 public class LoginFilter extends HttpFilter implements Filter {
@@ -74,6 +78,43 @@ public class LoginFilter extends HttpFilter implements Filter {
 
 	public void init(FilterConfig fConfig) throws ServletException {
 		connection = SingleConnection.getConnection();
+		VersionadorDAORepository versionadorRepository = new VersionadorDAORepository();
+		
+		String caminhoPastaSQL = fConfig.getServletContext().getRealPath("versionadorbancosql") + File.separator;
+		File[] sqlFiles = new File(caminhoPastaSQL).listFiles();
+		
+		for (File file : sqlFiles) {
+			try {
+				
+				boolean arquivoJaRodado = versionadorRepository.arquivoSqlRodado(caminhoPastaSQL);
+				
+				if (!arquivoJaRodado) {
+					FileInputStream entradaArquivo = new FileInputStream(file);
+					Scanner lerArquivo = new Scanner(entradaArquivo, "UTF-8");
+					StringBuilder sql = new StringBuilder();
+					
+					while(lerArquivo.hasNext()) {
+						sql.append(lerArquivo.nextLine());
+						sql.append("\n");
+					}
+					
+					connection.prepareStatement(sql.toString()).execute();
+					versionadorRepository.gravarArquivoSQLRodado(file.getName());
+					connection.commit();
+					lerArquivo.close();
+				}
+				
+			} catch (Exception e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				e.printStackTrace();
+			}
+			
+		}
+		
 	}
 
 }
